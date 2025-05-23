@@ -46,6 +46,8 @@ Looking for a powerful AI web agent without the $200/month price tag of OpenAI O
 - **Follow-up Questions**: Ask contextual follow-up questions about completed tasks
 - **Conversation History**: Easily access and manage your AI agent interaction history
 - **Multiple LLM Support**: Connect your preferred LLM providers and assign different models to different agents
+- **DOM Inspection**: Retrieve DOM details by selector and extract image URLs
+- **Image Download**: Save images from the current page to your computer
 
 
 ## 🚀 Quick Start

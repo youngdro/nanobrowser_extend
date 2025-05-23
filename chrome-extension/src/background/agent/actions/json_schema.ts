@@ -350,6 +350,65 @@ export const jsonNavigatorOutputSchema = {
             type: 'object',
             nullable: true,
           },
+          get_dom_info: {
+            description: 'Get DOM outer HTML for the element specified by CSS selector',
+            properties: {
+              intent: {
+                title: 'Intent',
+                type: 'string',
+                description: 'purpose of this action',
+              },
+              selector: {
+                title: 'Selector',
+                type: 'string',
+              },
+            },
+            required: ['intent', 'selector'],
+            title: 'get_dom_info_parameters',
+            type: 'object',
+            nullable: true,
+          },
+          extract_img_src: {
+            description: 'Extract image src URLs from a DOM string',
+            properties: {
+              intent: {
+                title: 'Intent',
+                type: 'string',
+                description: 'purpose of this action',
+              },
+              dom: {
+                title: 'Dom',
+                type: 'string',
+              },
+            },
+            required: ['intent', 'dom'],
+            title: 'extract_img_src_parameters',
+            type: 'object',
+            nullable: true,
+          },
+          download_image: {
+            description: 'Download image from URL to local storage',
+            properties: {
+              intent: {
+                title: 'Intent',
+                type: 'string',
+                description: 'purpose of this action',
+              },
+              url: {
+                title: 'Url',
+                type: 'string',
+              },
+              filename: {
+                title: 'Filename',
+                type: 'string',
+                nullable: true,
+              },
+            },
+            required: ['intent', 'url'],
+            title: 'download_image_parameters',
+            type: 'object',
+            nullable: true,
+          },
         },
         title: 'ActionModel',
         type: 'object',

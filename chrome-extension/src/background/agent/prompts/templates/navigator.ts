@@ -122,5 +122,11 @@ Common action sequences:
 - Plan is a json string wrapped by the <plan> tag
 - If a plan is provided, follow the instructions in the next_steps exactly first
 - If no plan is provided, just continue with the task
+
+12. DOM & Images:
+
+- Use `get_dom_info` to fetch the outer HTML for a CSS selector when you need details that are not visible.
+- Use `extract_img_src` on that HTML to list all image URLs.
+- Use `download_image` with an image URL to save it locally.
 </system_instructions>
 `;

@@ -18,6 +18,9 @@ import {
   getDropdownOptionsActionSchema,
   closeTabActionSchema,
   waitActionSchema,
+  getDomInfoActionSchema,
+  extractImgSrcActionSchema,
+  downloadImageActionSchema,
 } from './schemas';
 import { z } from 'zod';
 import { createLogger } from '@src/background/log';
@@ -580,6 +583,58 @@ export class ActionBuilder {
       true,
     );
     actions.push(selectDropdownOption);
+
+    const getDomInfo = new Action(async (input: z.infer<typeof getDomInfoActionSchema.schema>) => {
+      const intent = input.intent || `Get DOM info for selector ${input.selector}`;
+      this.context.emitEvent(Actors.NAVIGATOR, ExecutionState.ACT_START, intent);
+
+      const page = await this.context.browserContext.getCurrentPage();
+      try {
+        const dom = await page.getDomInfo(input.selector);
+        this.context.emitEvent(Actors.NAVIGATOR, ExecutionState.ACT_OK, 'DOM info retrieved');
+        return new ActionResult({ extractedContent: dom, includeInMemory: true });
+      } catch (error) {
+        const msg = `Failed to get DOM info: ${error instanceof Error ? error.message : String(error)}`;
+        this.context.emitEvent(Actors.NAVIGATOR, ExecutionState.ACT_FAIL, msg);
+        return new ActionResult({ error: msg, includeInMemory: true });
+      }
+    }, getDomInfoActionSchema);
+    actions.push(getDomInfo);
+
+    const extractImgSrc = new Action(async (input: z.infer<typeof extractImgSrcActionSchema.schema>) => {
+      const intent = input.intent || 'Extract image sources from DOM';
+      this.context.emitEvent(Actors.NAVIGATOR, ExecutionState.ACT_START, intent);
+
+      const page = await this.context.browserContext.getCurrentPage();
+      try {
+        const urls = await page.extractImgSrcFromDom(input.dom);
+        const msg = urls.join('\n');
+        this.context.emitEvent(Actors.NAVIGATOR, ExecutionState.ACT_OK, 'Extracted image sources');
+        return new ActionResult({ extractedContent: msg, includeInMemory: true });
+      } catch (error) {
+        const msg = `Failed to extract image src: ${error instanceof Error ? error.message : String(error)}`;
+        this.context.emitEvent(Actors.NAVIGATOR, ExecutionState.ACT_FAIL, msg);
+        return new ActionResult({ error: msg, includeInMemory: true });
+      }
+    }, extractImgSrcActionSchema);
+    actions.push(extractImgSrc);
+
+    const downloadImage = new Action(async (input: z.infer<typeof downloadImageActionSchema.schema>) => {
+      const intent = input.intent || `Download image ${input.url}`;
+      this.context.emitEvent(Actors.NAVIGATOR, ExecutionState.ACT_START, intent);
+
+      const page = await this.context.browserContext.getCurrentPage();
+      try {
+        const msg = await page.downloadImage(input.url, input.filename);
+        this.context.emitEvent(Actors.NAVIGATOR, ExecutionState.ACT_OK, msg);
+        return new ActionResult({ extractedContent: msg, includeInMemory: true });
+      } catch (error) {
+        const msg = `Failed to download image: ${error instanceof Error ? error.message : String(error)}`;
+        this.context.emitEvent(Actors.NAVIGATOR, ExecutionState.ACT_FAIL, msg);
+        return new ActionResult({ error: msg, includeInMemory: true });
+      }
+    }, downloadImageActionSchema);
+    actions.push(downloadImage);
 
     return actions;
   }

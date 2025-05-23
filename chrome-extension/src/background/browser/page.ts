@@ -1049,6 +1049,37 @@ export default class Page {
     return selectorMap.get(index) || null;
   }
 
+  async getDomInfo(selector: string): Promise<string> {
+    if (!this._puppeteerPage) {
+      throw new Error('Puppeteer page is not connected');
+    }
+
+    try {
+      const html = await this._puppeteerPage.$eval(selector, el => el.outerHTML);
+      return html as string;
+    } catch (error) {
+      throw new Error(`Failed to get DOM info: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  }
+
+  async extractImgSrcFromDom(dom: string): Promise<string[]> {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(dom, 'text/html');
+    const images = Array.from(doc.querySelectorAll('img')) as HTMLImageElement[];
+    return images.map(img => img.src).filter(src => src);
+  }
+
+  async downloadImage(url: string, filename?: string): Promise<string> {
+    try {
+      const options: chrome.downloads.DownloadOptions = { url };
+      if (filename) options.filename = filename;
+      await chrome.downloads.download(options);
+      return `Downloaded ${url}`;
+    } catch (error) {
+      throw new Error(`Failed to download image: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  }
+
   isFileUploader(elementNode: DOMElementNode, maxDepth = 3, currentDepth = 0): boolean {
     if (currentDepth > maxDepth) {
       return false;

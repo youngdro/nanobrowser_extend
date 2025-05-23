@@ -175,3 +175,31 @@ export const waitActionSchema: ActionSchema = {
     seconds: z.number().nullable().optional(),
   }),
 };
+
+export const getDomInfoActionSchema: ActionSchema = {
+  name: 'get_dom_info',
+  description: 'Get DOM outer HTML for the element specified by CSS selector',
+  schema: z.object({
+    intent: z.string().optional(),
+    selector: z.string(),
+  }),
+};
+
+export const extractImgSrcActionSchema: ActionSchema = {
+  name: 'extract_img_src',
+  description: 'Extract image src URLs from a DOM string',
+  schema: z.object({
+    intent: z.string().optional(),
+    dom: z.string(),
+  }),
+};
+
+export const downloadImageActionSchema: ActionSchema = {
+  name: 'download_image',
+  description: 'Download image from URL to local storage',
+  schema: z.object({
+    intent: z.string().optional(),
+    url: z.string(),
+    filename: z.string().optional(),
+  }),
+};

@@ -293,6 +293,55 @@ export const geminiNavigatorOutputSchema = {
             },
             required: ['intent', 'index', 'text'],
           },
+          get_dom_info: {
+            type: 'object',
+            description: 'Get DOM outer HTML for the element specified by CSS selector',
+            nullable: true,
+            properties: {
+              intent: {
+                type: 'string',
+                description: 'purpose of this action',
+              },
+              selector: {
+                type: 'string',
+              },
+            },
+            required: ['intent', 'selector'],
+          },
+          extract_img_src: {
+            type: 'object',
+            description: 'Extract image src URLs from a DOM string',
+            nullable: true,
+            properties: {
+              intent: {
+                type: 'string',
+                description: 'purpose of this action',
+              },
+              dom: {
+                type: 'string',
+              },
+            },
+            required: ['intent', 'dom'],
+          },
+          download_image: {
+            type: 'object',
+            description: 'Download image from URL to local storage',
+            nullable: true,
+            properties: {
+              intent: {
+                type: 'string',
+                description: 'purpose of this action',
+              },
+              url: {
+                type: 'string',
+              },
+              filename: {
+                type: 'string',
+                nullable: true,
+              },
+            },
+            required: ['intent', 'url'],
+          },
         },
       },
     },

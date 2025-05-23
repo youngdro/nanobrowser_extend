@@ -202,6 +202,39 @@ export const jsonNavigatorOutputSchema = {
           description:
             'Select dropdown option for interactive element index by the text of the option you want to select',
         },
+        get_dom_info: {
+          anyOf: [
+            {
+              $ref: '#/$defs/get_dom_info_parameters',
+            },
+            {
+              type: 'null',
+            },
+          ],
+          description: 'Get DOM outer HTML for the element specified by CSS selector',
+        },
+        extract_img_src: {
+          anyOf: [
+            {
+              $ref: '#/$defs/extract_img_src_parameters',
+            },
+            {
+              type: 'null',
+            },
+          ],
+          description: 'Extract image src URLs from a DOM string',
+        },
+        download_image: {
+          anyOf: [
+            {
+              $ref: '#/$defs/download_image_parameters',
+            },
+            {
+              type: 'null',
+            },
+          ],
+          description: 'Download image from URL to local storage',
+        },
       },
       title: 'ActionModel',
       type: 'object',
@@ -496,6 +529,59 @@ export const jsonNavigatorOutputSchema = {
       },
       required: ['intent', 'index', 'text'],
       title: 'select_dropdown_option_parameters',
+      type: 'object',
+    },
+    get_dom_info_parameters: {
+      properties: {
+        intent: {
+          title: 'Intent',
+          type: 'string',
+          description: 'purpose of this action',
+        },
+        selector: {
+          title: 'Selector',
+          type: 'string',
+        },
+      },
+      required: ['intent', 'selector'],
+      title: 'get_dom_info_parameters',
+      type: 'object',
+    },
+    extract_img_src_parameters: {
+      properties: {
+        intent: {
+          title: 'Intent',
+          type: 'string',
+          description: 'purpose of this action',
+        },
+        dom: {
+          title: 'Dom',
+          type: 'string',
+        },
+      },
+      required: ['intent', 'dom'],
+      title: 'extract_img_src_parameters',
+      type: 'object',
+    },
+    download_image_parameters: {
+      properties: {
+        intent: {
+          title: 'Intent',
+          type: 'string',
+          description: 'purpose of this action',
+        },
+        url: {
+          title: 'Url',
+          type: 'string',
+        },
+        filename: {
+          title: 'Filename',
+          type: 'string',
+          nullable: true,
+        },
+      },
+      required: ['intent', 'url'],
+      title: 'download_image_parameters',
       type: 'object',
     },
     WaitAction: {
